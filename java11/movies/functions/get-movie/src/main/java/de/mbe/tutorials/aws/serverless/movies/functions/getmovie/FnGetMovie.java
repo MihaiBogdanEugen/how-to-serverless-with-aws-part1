@@ -1,6 +1,7 @@
 package de.mbe.tutorials.aws.serverless.movies.functions.getmovie;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
+import com.amazonaws.services.dynamodbv2.model.AmazonDynamoDBException;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayV2ProxyRequestEvent;
@@ -60,6 +61,8 @@ public final class FnGetMovie implements RequestHandler<APIGatewayV2ProxyRequest
             final var movieAsString = MAPPER.writeValueAsString(movie);
             return ok(LOGGER, movieAsString);
 
+        } catch (AmazonDynamoDBException error) {
+            return amazonDynamoDBException(LOGGER, error);
         } catch (Exception error) {
             return internalServerError(LOGGER, error);
         }

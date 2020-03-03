@@ -1,5 +1,6 @@
 package de.mbe.tutorials.aws.serverless.movies.functions.getmovie.utils;
 
+import com.amazonaws.services.dynamodbv2.model.AmazonDynamoDBException;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayV2ProxyResponseEvent;
 import org.apache.logging.log4j.Logger;
 
@@ -28,6 +29,11 @@ public interface APIGatewayV2ProxyResponseUtils {
     default APIGatewayV2ProxyResponseEvent internalServerError(final Logger logger, final Exception error) {
         logger.error(error.getMessage(), error);
         return reply(logger, 500, error.getMessage());
+    }
+
+    default APIGatewayV2ProxyResponseEvent amazonDynamoDBException(final Logger logger, final AmazonDynamoDBException error) {
+        logger.error(error.getMessage(), error);
+        return reply(logger, error.getStatusCode(), error.getMessage());
     }
 
     private static APIGatewayV2ProxyResponseEvent reply(final Logger logger, final int statusCode, final String body) {

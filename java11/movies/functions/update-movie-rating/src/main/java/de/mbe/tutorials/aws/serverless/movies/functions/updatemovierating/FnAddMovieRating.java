@@ -1,6 +1,7 @@
 package de.mbe.tutorials.aws.serverless.movies.functions.updatemovierating;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
+import com.amazonaws.services.dynamodbv2.model.AmazonDynamoDBException;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayV2ProxyRequestEvent;
@@ -54,6 +55,8 @@ public final class FnAddMovieRating implements RequestHandler<APIGatewayV2ProxyR
             this.repository.updateMovieRating(movieRating);
             return ok(LOGGER, "SUCCESS");
 
+        } catch (AmazonDynamoDBException error) {
+            return amazonDynamoDBException(LOGGER, error);
         } catch (Exception error) {
             return internalServerError(LOGGER, error);
         }
