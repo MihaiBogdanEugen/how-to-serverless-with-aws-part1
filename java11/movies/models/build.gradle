@@ -1,3 +1,5 @@
 dependencies {
-    implementation "com.amazonaws:aws-java-sdk-dynamodb:$awsJavaSdkVersion"
+    implementation platform("com.amazonaws:aws-java-sdk-bom:$awsJavaSdkVersion")
+
+    implementation "com.amazonaws:aws-java-sdk-dynamodb"
 }

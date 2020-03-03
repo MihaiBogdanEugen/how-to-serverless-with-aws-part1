@@ -6,6 +6,8 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayV2ProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayV2ProxyResponseEvent;
+import com.amazonaws.xray.AWSXRay;
+import com.amazonaws.xray.handlers.TracingHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.mbe.tutorials.aws.serverless.movies.functions.updatemovierating.repository.MoviesDynamoDbRepository;
 import de.mbe.tutorials.aws.serverless.movies.functions.updatemovierating.utils.APIGatewayV2ProxyResponseUtils;
@@ -15,17 +17,18 @@ import org.apache.logging.log4j.Logger;
 
 import static com.amazonaws.util.StringUtils.isNullOrEmpty;
 
-public final class FnAddMovieRating implements RequestHandler<APIGatewayV2ProxyRequestEvent, APIGatewayV2ProxyResponseEvent>, APIGatewayV2ProxyResponseUtils {
+public final class FnUpdateMovieRating implements RequestHandler<APIGatewayV2ProxyRequestEvent, APIGatewayV2ProxyResponseEvent>, APIGatewayV2ProxyResponseUtils {
 
-    private static final Logger LOGGER = LogManager.getLogger(FnAddMovieRating.class);
+    private static final Logger LOGGER = LogManager.getLogger(FnUpdateMovieRating.class);
     private final ObjectMapper MAPPER = new ObjectMapper();
 
     private final MoviesDynamoDbRepository repository;
 
-    public FnAddMovieRating() {
+    public FnUpdateMovieRating() {
 
         final var amazonDynamoDB = AmazonDynamoDBClientBuilder
                 .standard()
+                .withRequestHandlers(new TracingHandler(AWSXRay.getGlobalRecorder()))
                 .build();
 
         final var movieRatingsTable = System.getenv("MOVIE_RATINGS_TABLE");
@@ -42,12 +45,12 @@ public final class FnAddMovieRating implements RequestHandler<APIGatewayV2ProxyR
             return methodNotAllowed(LOGGER, "Method " + request.getHttpMethod() + " not allowed");
         }
 
-        if (!request.getPathParameters().containsKey("id") || isNullOrEmpty(request.getPathParameters().get("id"))) {
-            return badRequest(LOGGER, "Missing {id} path parameter");
+        if (!request.getPathParameters().containsKey("movieId") || isNullOrEmpty(request.getPathParameters().get("movieId"))) {
+            return badRequest(LOGGER, "Missing {movieId} path parameter");
         }
 
-        final var id = request.getPathParameters().get("id");
-        LOGGER.info("Patching movie {}", id);
+        final var movieId = request.getPathParameters().get("movieId");
+        LOGGER.info("Patching movie {}", movieId);
 
         try {
 

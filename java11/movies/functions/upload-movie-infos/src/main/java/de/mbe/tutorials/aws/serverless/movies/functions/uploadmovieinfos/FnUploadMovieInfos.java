@@ -9,6 +9,8 @@ import com.amazonaws.services.lambda.runtime.events.S3Event;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
+import com.amazonaws.xray.AWSXRay;
+import com.amazonaws.xray.handlers.TracingHandler;
 import de.mbe.tutorials.aws.serverless.movies.functions.uploadmovieinfos.repository.MoviesDynamoDbRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,10 +34,12 @@ public final class FnUploadMovieInfos implements RequestHandler<S3Event, Integer
 
         this.amazonS3 = AmazonS3ClientBuilder
                 .standard()
+                .withRequestHandlers(new TracingHandler(AWSXRay.getGlobalRecorder()))
                 .build();
 
         this.amazonDynamoDB = AmazonDynamoDBClientBuilder
                 .standard()
+                .withRequestHandlers(new TracingHandler(AWSXRay.getGlobalRecorder()))
                 .build();
 
         this.movieInfosBucket = System.getenv("MOVIE_INFOS_BUCKET");
@@ -47,6 +51,8 @@ public final class FnUploadMovieInfos implements RequestHandler<S3Event, Integer
 
     @Override
     public Integer handleRequest(S3Event input, Context context) {
+
+        LOGGER.info("FnUploadMovieInfos.getRemainingTimeInMillis {} ", context.getRemainingTimeInMillis());
 
         var result = 0;
         final var lines = new ArrayList<String>();

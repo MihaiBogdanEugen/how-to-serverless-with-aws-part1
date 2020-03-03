@@ -21,7 +21,7 @@ public final class MoviesDynamoDbRepository {
         this.movieRatingsTable = movieRatingsTable;
     }
 
-    public Movie getByMovieId(final String id) {
+    public Movie getByMovieId(final String movieId) {
 
         final var readFromMovieInfosConfig = DynamoDBMapperConfig.builder()
                 .withConsistentReads(DynamoDBMapperConfig.ConsistentReads.CONSISTENT);
@@ -30,7 +30,7 @@ public final class MoviesDynamoDbRepository {
             readFromMovieInfosConfig.withTableNameOverride(new DynamoDBMapperConfig.TableNameOverride(this.movieInfosTable));
         }
 
-        final var movieInfo = this.dynamoDBMapper.load(MovieInfo.class, id, readFromMovieInfosConfig.build());
+        final var movieInfo = this.dynamoDBMapper.load(MovieInfo.class, movieId, readFromMovieInfosConfig.build());
 
         final var readFromMovieRatingsConfig = DynamoDBMapperConfig.builder()
                 .withConsistentReads(DynamoDBMapperConfig.ConsistentReads.CONSISTENT);
@@ -39,7 +39,7 @@ public final class MoviesDynamoDbRepository {
             readFromMovieRatingsConfig.withTableNameOverride(new DynamoDBMapperConfig.TableNameOverride(this.movieRatingsTable));
         }
 
-        final var movieRating = this.dynamoDBMapper.load(MovieRating.class, id, readFromMovieRatingsConfig.build());
+        final var movieRating = this.dynamoDBMapper.load(MovieRating.class, movieId, readFromMovieRatingsConfig.build());
 
 
         final var movie = new Movie();
@@ -59,7 +59,7 @@ public final class MoviesDynamoDbRepository {
             movie.setRottenTomatoesRating(movieRating.getRottenTomatoesRating());
         }
 
-        movie.setId(id);
+        movie.setId(movieId);
         return movie;
     }
 }

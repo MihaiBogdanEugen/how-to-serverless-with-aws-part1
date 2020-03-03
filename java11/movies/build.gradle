@@ -1,8 +1,9 @@
 ext {
     awsLambdaJavaCoreVersion = "1.2.0"
-    awsLambdaJavaLog4j2Version = "1.1.0"
     awsLambdaJavaEventsVersion = "2.2.7"
+    awsLambdaJavaLog4j2Version = "1.1.0"
     awsJavaSdkVersion = "1.11.717"
+    awsXrayJavaSdkVersion = "2.4.0"
     gradleVersion = "6.2.1"
     jacksonVersion = "2.10.2"
     log4jVersion = "2.13.0"
@@ -35,9 +36,16 @@ configure(subprojects.findAll {it.name != "models"}) {
         implementation "com.amazonaws:aws-lambda-java-core:$awsLambdaJavaCoreVersion"
         implementation "com.amazonaws:aws-lambda-java-events:$awsLambdaJavaEventsVersion"
         implementation "com.amazonaws:aws-lambda-java-log4j2:$awsLambdaJavaLog4j2Version"
+
         implementation "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
         implementation "org.apache.logging.log4j:log4j-api:$log4jVersion"
         implementation "org.apache.logging.log4j:log4j-core:$log4jVersion"
+
+        implementation platform("com.amazonaws:aws-xray-recorder-sdk-bom:$awsXrayJavaSdkVersion")
+        implementation "com.amazonaws:aws-xray-recorder-sdk-core"
+        implementation "com.amazonaws:aws-xray-recorder-sdk-aws-sdk"
+
+        implementation platform("com.amazonaws:aws-java-sdk-bom:$awsJavaSdkVersion")
     }
 
     task buildZip(type: Zip) {

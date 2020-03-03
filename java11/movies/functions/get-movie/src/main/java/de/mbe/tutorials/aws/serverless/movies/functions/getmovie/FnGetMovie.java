@@ -6,6 +6,8 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayV2ProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayV2ProxyResponseEvent;
+import com.amazonaws.xray.AWSXRay;
+import com.amazonaws.xray.handlers.TracingHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.mbe.tutorials.aws.serverless.movies.functions.getmovie.repository.MoviesDynamoDbRepository;
 import de.mbe.tutorials.aws.serverless.movies.functions.getmovie.utils.APIGatewayV2ProxyResponseUtils;
@@ -26,6 +28,7 @@ public final class FnGetMovie implements RequestHandler<APIGatewayV2ProxyRequest
 
         final var amazonDynamoDB = AmazonDynamoDBClientBuilder
                 .standard()
+                .withRequestHandlers(new TracingHandler(AWSXRay.getGlobalRecorder()))
                 .build();
 
         final var movieInfosTable = System.getenv("MOVIE_INFOS_TABLE");
@@ -43,19 +46,19 @@ public final class FnGetMovie implements RequestHandler<APIGatewayV2ProxyRequest
             return methodNotAllowed(LOGGER, "Method " + request.getHttpMethod() + " not allowed");
         }
 
-        if (!request.getPathParameters().containsKey("id") || isNullOrEmpty(request.getPathParameters().get("id"))) {
+        if (!request.getPathParameters().containsKey("movieId") || isNullOrEmpty(request.getPathParameters().get("movieId"))) {
             return badRequest(LOGGER, "Missing {id} path parameter");
         }
 
-        final var id = request.getPathParameters().get("id");
-        LOGGER.info("Retrieving movie {}", id);
+        final var movieId = request.getPathParameters().get("movieId");
+        LOGGER.info("Retrieving movie {}", movieId);
 
         try {
 
-            final var movie = repository.getByMovieId(id);
+            final var movie = repository.getByMovieId(movieId);
 
             if (movie == null) {
-                return notFound(LOGGER, "Movie " + id + " not found");
+                return notFound(LOGGER, "Movie " + movieId + " not found");
             }
 
             final var movieAsString = MAPPER.writeValueAsString(movie);
