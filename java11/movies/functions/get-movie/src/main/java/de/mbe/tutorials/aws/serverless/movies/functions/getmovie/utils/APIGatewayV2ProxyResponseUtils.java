@@ -41,8 +41,10 @@ public interface APIGatewayV2ProxyResponseUtils {
         switch (statusCode % 100) {
             case 2:
                 logger.info("SUCCESS! statusCode: {}, message: {}", statusCode, body);
+                break;
             case 4:
                 logger.warn("CLIENT ERROR! statusCode: {}, message: {}", statusCode, body);
+                break;
             default:
                 logger.error("SERVER ERROR! statusCode: {}, message: {}", statusCode, body);
         }
