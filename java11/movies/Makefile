@@ -16,3 +16,5 @@ package: clean test
 	./gradlew :functions:get-movie:build && \
 	./gradlew :functions:update-movie-rating:build && \
 	./gradlew :functions:upload-movie-infos:build
+
+.PHONY: help clean test package
