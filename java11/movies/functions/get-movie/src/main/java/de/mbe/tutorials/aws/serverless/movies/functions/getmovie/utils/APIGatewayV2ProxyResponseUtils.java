@@ -22,10 +22,6 @@ public interface APIGatewayV2ProxyResponseUtils {
         return reply(logger, 404, message);
     }
 
-    default APIGatewayV2ProxyResponseEvent methodNotAllowed(final Logger logger, final String message) {
-        return reply(logger, 405, message);
-    }
-
     default APIGatewayV2ProxyResponseEvent internalServerError(final Logger logger, final Exception error) {
         logger.error(error.getMessage(), error);
         return reply(logger, 500, error.getMessage());

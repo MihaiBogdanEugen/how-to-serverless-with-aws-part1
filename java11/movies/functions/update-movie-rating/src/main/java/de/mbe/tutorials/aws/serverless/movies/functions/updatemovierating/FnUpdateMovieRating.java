@@ -41,10 +41,6 @@ public final class FnUpdateMovieRating implements RequestHandler<APIGatewayV2Pro
 
         LOGGER.info("FnAddMovieRating.getRemainingTimeInMillis {} ", context.getRemainingTimeInMillis());
 
-        if (!request.getHttpMethod().equalsIgnoreCase("patch")) {
-            return methodNotAllowed(LOGGER, "Method " + request.getHttpMethod() + " not allowed");
-        }
-
         if (!request.getPathParameters().containsKey("movieId") || isNullOrEmpty(request.getPathParameters().get("movieId"))) {
             return badRequest(LOGGER, "Missing {movieId} path parameter");
         }

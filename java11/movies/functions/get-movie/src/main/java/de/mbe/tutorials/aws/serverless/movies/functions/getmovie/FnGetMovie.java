@@ -42,10 +42,6 @@ public final class FnGetMovie implements RequestHandler<APIGatewayV2ProxyRequest
 
         LOGGER.info("FnGetMovie.getRemainingTimeInMillis {} ", context.getRemainingTimeInMillis());
 
-        if (!request.getHttpMethod().equalsIgnoreCase("get")) {
-            return methodNotAllowed(LOGGER, "Method " + request.getHttpMethod() + " not allowed");
-        }
-
         if (!request.getPathParameters().containsKey("movieId") || isNullOrEmpty(request.getPathParameters().get("movieId"))) {
             return badRequest(LOGGER, "Missing {id} path parameter");
         }

@@ -18,14 +18,6 @@ public interface APIGatewayV2ProxyResponseUtils {
         return reply(logger, 400, message);
     }
 
-    default APIGatewayV2ProxyResponseEvent notFound(final Logger logger, final String message) {
-        return reply(logger, 404, message);
-    }
-
-    default APIGatewayV2ProxyResponseEvent methodNotAllowed(final Logger logger, final String message) {
-        return reply(logger, 405, message);
-    }
-
     default APIGatewayV2ProxyResponseEvent internalServerError(final Logger logger, final Exception error) {
         logger.error(error.getMessage(), error);
         return reply(logger, 500, error.getMessage());
@@ -41,8 +33,10 @@ public interface APIGatewayV2ProxyResponseUtils {
         switch (statusCode % 100) {
             case 2:
                 logger.info("SUCCESS! statusCode: {}, message: {}", statusCode, body);
+                break;
             case 4:
                 logger.warn("CLIENT ERROR! statusCode: {}, message: {}", statusCode, body);
+                break;
             default:
                 logger.error("SERVER ERROR! statusCode: {}, message: {}", statusCode, body);
         }

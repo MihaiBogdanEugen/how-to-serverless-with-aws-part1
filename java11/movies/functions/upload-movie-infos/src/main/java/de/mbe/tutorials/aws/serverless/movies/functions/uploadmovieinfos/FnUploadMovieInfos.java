@@ -43,7 +43,6 @@ public final class FnUploadMovieInfos implements RequestHandler<S3Event, Integer
                 .build();
 
         this.movieInfosBucket = System.getenv("MOVIE_INFOS_BUCKET");
-
         final var movieInfosTable = System.getenv("MOVIE_INFOS_TABLE");
 
         this.repository = new MoviesDynamoDbRepository(amazonDynamoDB, movieInfosTable);
