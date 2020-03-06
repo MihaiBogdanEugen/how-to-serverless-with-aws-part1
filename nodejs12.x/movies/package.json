@@ -1,0 +1,16 @@
+{
+    "name": "get-movies",
+    "version": "1.0.0",
+    "main": "",
+    "author": "Bogdan-Eugen Mihai",
+    "license": "Apache-2.0",
+    "dependencies": {
+        "aws-sdk": "2.634.0",
+        "aws-xray-sdk-core": "2.5.0",
+        "pino": "5.17.0"
+    },
+    "engines": {
+        "node": "12.16.1",
+        "npm": "6.13.4"
+    }
+}
