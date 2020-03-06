@@ -16,17 +16,6 @@ dynamoDB = boto3.resource("dynamodb")
 def handle_request(event, context):
     logger.info(f"FnUpdateMovieRating.RemainingTimeInMillis {context.get_remaining_time_in_millis()}")
 
-    request_http_method = event["httpMethod"]
-    if request_http_method.lower() != "patch":
-        logger.info(f"Unsupported http method {request_http_method}")
-        return {
-            "headers": {
-                "Content-Type": "application/json"
-            },
-            "statusCode": 405,
-            "body": f"Method {request_http_method} not allowed"
-        }
-
     if "movieId" not in event["pathParameters"]:
         logger.info("Missing parameter movieId")
         return {
