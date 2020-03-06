@@ -29,9 +29,8 @@ subprojects {
     }
 }
 
-configure(subprojects.findAll {it.name != "models"}) {
+configure(subprojects) {
     dependencies {
-        implementation project(":models")
 
         implementation "com.amazonaws:aws-lambda-java-core:$awsLambdaJavaCoreVersion"
         implementation "com.amazonaws:aws-lambda-java-events:$awsLambdaJavaEventsVersion"

@@ -3,8 +3,8 @@ package de.mbe.tutorials.aws.serverless.movies.functions.uploadmovieinfos.reposi
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
-import de.mbe.tutorials.aws.serverless.movies.models.MovieInfo;
-import de.mbe.tutorials.aws.serverless.movies.models.convertors.LocalDateConverter;
+import de.mbe.tutorials.aws.serverless.movies.functions.uploadmovieinfos.repository.models.MovieInfo;
+import de.mbe.tutorials.aws.serverless.movies.functions.uploadmovieinfos.repository.models.convertors.LocalDateConverter;
 
 import java.util.Collections;
 import java.util.List;

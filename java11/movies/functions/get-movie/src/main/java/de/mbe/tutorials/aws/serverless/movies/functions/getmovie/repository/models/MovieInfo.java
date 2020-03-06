@@ -1,10 +1,10 @@
-package de.mbe.tutorials.aws.serverless.movies.models;
+package de.mbe.tutorials.aws.serverless.movies.functions.getmovie.repository.models;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
-import de.mbe.tutorials.aws.serverless.movies.models.convertors.LocalDateConverter;
+import de.mbe.tutorials.aws.serverless.movies.functions.getmovie.repository.models.convertors.LocalDateConverter;
 
 import java.time.LocalDate;
 

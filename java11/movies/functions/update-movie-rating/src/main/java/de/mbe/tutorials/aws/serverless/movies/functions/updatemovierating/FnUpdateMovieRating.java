@@ -10,8 +10,8 @@ import com.amazonaws.xray.AWSXRay;
 import com.amazonaws.xray.handlers.TracingHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.mbe.tutorials.aws.serverless.movies.functions.updatemovierating.repository.MoviesDynamoDbRepository;
+import de.mbe.tutorials.aws.serverless.movies.functions.updatemovierating.repository.models.MovieRating;
 import de.mbe.tutorials.aws.serverless.movies.functions.updatemovierating.utils.APIGatewayV2ProxyResponseUtils;
-import de.mbe.tutorials.aws.serverless.movies.models.MovieRating;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

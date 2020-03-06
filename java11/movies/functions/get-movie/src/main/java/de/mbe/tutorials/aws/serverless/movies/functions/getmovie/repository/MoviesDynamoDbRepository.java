@@ -3,9 +3,9 @@ package de.mbe.tutorials.aws.serverless.movies.functions.getmovie.repository;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
-import de.mbe.tutorials.aws.serverless.movies.models.Movie;
-import de.mbe.tutorials.aws.serverless.movies.models.MovieInfo;
-import de.mbe.tutorials.aws.serverless.movies.models.MovieRating;
+import de.mbe.tutorials.aws.serverless.movies.functions.getmovie.repository.models.Movie;
+import de.mbe.tutorials.aws.serverless.movies.functions.getmovie.repository.models.MovieInfo;
+import de.mbe.tutorials.aws.serverless.movies.functions.getmovie.repository.models.MovieRating;
 
 import static com.amazonaws.util.StringUtils.isNullOrEmpty;
 

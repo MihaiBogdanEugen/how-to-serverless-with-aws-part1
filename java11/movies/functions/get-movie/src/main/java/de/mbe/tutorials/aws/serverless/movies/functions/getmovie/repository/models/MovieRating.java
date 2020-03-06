@@ -1,4 +1,4 @@
-package de.mbe.tutorials.aws.serverless.movies.models;
+package de.mbe.tutorials.aws.serverless.movies.functions.getmovie.repository.models;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;

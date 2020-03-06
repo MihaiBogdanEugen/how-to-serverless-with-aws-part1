@@ -1,4 +1,4 @@
-package de.mbe.tutorials.aws.serverless.movies.models.convertors;
+package de.mbe.tutorials.aws.serverless.movies.functions.uploadmovieinfos.repository.models.convertors;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverter;
 
