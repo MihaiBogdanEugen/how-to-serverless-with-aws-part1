@@ -15,11 +15,11 @@ package: clean
 	$(call package_python_fn,upload-movie-infos)
 
 define package_python_fn
-	pip3 install -r requirements.txt -t ./temp/$(1) && \
-	cp -r $(1) temp/$(1)/ && \
-	cd ./temp/$(1)/ && \
-	zip -r9 ../../packages/$(1).zip . && \
-	cd ../../ &&\
+	pip3 install -r requirements.txt -t ./temp/ && \
+	cp -r $(1) temp/ && \
+	cd ./temp/ && \
+	zip -r9 ../packages/$(1)-python3.8.zip . && \
+	cd ../ &&\
 	rm -rdf temp/
 endef
 

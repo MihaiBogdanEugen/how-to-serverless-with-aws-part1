@@ -132,5 +132,5 @@ dmypy.json
 # PyCharm
 .idea
 *.iml
-package/
+packages/
 temp/
