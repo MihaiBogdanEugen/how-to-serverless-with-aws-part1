@@ -17,13 +17,13 @@ def handle_request(event, context):
     logger.info(f"FnGetMovie.RemainingTimeInMillis {context.get_remaining_time_in_millis()}")
 
     if "movieId" not in event["pathParameters"]:
-        logger.info("Missing parameter movieId")
+        logger.info("Missing path parameter {movieId}")
         return {
             "headers": {
                 "Content-Type": "application/json"
             },
             "statusCode": 400,
-            "body": "Missing {id} path parameter"
+            "body": "Missing path parameter {movieId}"
         }
 
     movie_id = event["pathParameters"]["movieId"]
