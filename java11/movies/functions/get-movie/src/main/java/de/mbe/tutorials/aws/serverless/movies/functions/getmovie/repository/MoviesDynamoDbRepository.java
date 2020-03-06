@@ -12,35 +12,34 @@ import static com.amazonaws.util.StringUtils.isNullOrEmpty;
 public final class MoviesDynamoDbRepository {
 
     private final DynamoDBMapper dynamoDBMapper;
-    private final String movieInfosTable;
-    private final String movieRatingsTable;
+    private final DynamoDBMapperConfig readMovieRatingConfig;
+    private final DynamoDBMapperConfig readMovieInfoConfig;
 
     public MoviesDynamoDbRepository(final AmazonDynamoDB amazonDynamoDB, final String movieInfosTable, final String movieRatingsTable) {
+
         this.dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB);
-        this.movieInfosTable = movieInfosTable;
-        this.movieRatingsTable = movieRatingsTable;
+
+        final var readMovieRatingConfigBuilder = DynamoDBMapperConfig.builder()
+                .withConsistentReads(DynamoDBMapperConfig.ConsistentReads.CONSISTENT);
+        if (!isNullOrEmpty(movieRatingsTable)) {
+            readMovieRatingConfigBuilder.withTableNameOverride(new DynamoDBMapperConfig.TableNameOverride(movieRatingsTable));
+        }
+
+        this.readMovieRatingConfig = readMovieRatingConfigBuilder.build();
+
+        final var readMovieInfoConfigBuilder = DynamoDBMapperConfig.builder()
+                .withConsistentReads(DynamoDBMapperConfig.ConsistentReads.CONSISTENT);
+        if (!isNullOrEmpty(movieInfosTable)) {
+            readMovieInfoConfigBuilder.withTableNameOverride(new DynamoDBMapperConfig.TableNameOverride(movieInfosTable));
+        }
+
+        this.readMovieInfoConfig = readMovieInfoConfigBuilder.build();
     }
 
     public Movie getByMovieId(final String movieId) {
 
-        final var readFromMovieInfosConfig = DynamoDBMapperConfig.builder()
-                .withConsistentReads(DynamoDBMapperConfig.ConsistentReads.CONSISTENT);
-
-        if (!isNullOrEmpty(this.movieInfosTable)) {
-            readFromMovieInfosConfig.withTableNameOverride(new DynamoDBMapperConfig.TableNameOverride(this.movieInfosTable));
-        }
-
-        final var movieInfo = this.dynamoDBMapper.load(MovieInfo.class, movieId, readFromMovieInfosConfig.build());
-
-        final var readFromMovieRatingsConfig = DynamoDBMapperConfig.builder()
-                .withConsistentReads(DynamoDBMapperConfig.ConsistentReads.CONSISTENT);
-
-        if (!isNullOrEmpty(this.movieRatingsTable)) {
-            readFromMovieRatingsConfig.withTableNameOverride(new DynamoDBMapperConfig.TableNameOverride(this.movieRatingsTable));
-        }
-
-        final var movieRating = this.dynamoDBMapper.load(MovieRating.class, movieId, readFromMovieRatingsConfig.build());
-
+        final var movieInfo = this.dynamoDBMapper.load(MovieInfo.class, movieId, this.readMovieInfoConfig);
+        final var movieRating = this.dynamoDBMapper.load(MovieRating.class, movieId, this.readMovieRatingConfig);
 
         final var movie = new Movie();
 

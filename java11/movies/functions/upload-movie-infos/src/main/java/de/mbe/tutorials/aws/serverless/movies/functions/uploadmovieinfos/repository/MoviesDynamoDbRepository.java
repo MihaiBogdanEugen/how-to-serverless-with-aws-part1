@@ -15,11 +15,19 @@ import static com.amazonaws.util.StringUtils.isNullOrEmpty;
 public final class MoviesDynamoDbRepository {
 
     private final DynamoDBMapper dynamoDBMapper;
-    private final String movieInfosTable;
+    private final DynamoDBMapperConfig writeMovieInfoConfig;
 
     public MoviesDynamoDbRepository(final AmazonDynamoDB amazonDynamoDB, final String movieInfosTable) {
+
         this.dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB);
-        this.movieInfosTable = movieInfosTable;
+
+        final var writeMovieInfoConfigBuilder = DynamoDBMapperConfig.builder()
+                .withSaveBehavior(DynamoDBMapperConfig.SaveBehavior.PUT);
+        if (!isNullOrEmpty(movieInfosTable)) {
+            writeMovieInfoConfigBuilder.withTableNameOverride(new DynamoDBMapperConfig.TableNameOverride(movieInfosTable));
+        }
+
+        this.writeMovieInfoConfig = writeMovieInfoConfigBuilder.build();
     }
 
     public int saveLines(final List<String> lines) {
@@ -42,14 +50,7 @@ public final class MoviesDynamoDbRepository {
             return 0;
         }
 
-        final var writeToMovieInfosConfig = DynamoDBMapperConfig.builder()
-                .withSaveBehavior(DynamoDBMapperConfig.SaveBehavior.CLOBBER);
-
-        if (!isNullOrEmpty(this.movieInfosTable)) {
-            writeToMovieInfosConfig.withTableNameOverride(new DynamoDBMapperConfig.TableNameOverride(this.movieInfosTable));
-        }
-
-        this.dynamoDBMapper.batchWrite(movieInfos, Collections.emptyList(), writeToMovieInfosConfig.build());
+        this.dynamoDBMapper.batchWrite(movieInfos, Collections.emptyList(), this.writeMovieInfoConfig);
 
         return movieInfos.size();
     }

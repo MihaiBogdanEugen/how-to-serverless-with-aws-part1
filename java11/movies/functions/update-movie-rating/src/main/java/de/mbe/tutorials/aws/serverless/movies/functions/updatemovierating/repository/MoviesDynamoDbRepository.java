@@ -10,23 +10,22 @@ import de.mbe.tutorials.aws.serverless.movies.models.MovieRating;
 public final class MoviesDynamoDbRepository {
 
     private final DynamoDBMapper dynamoDBMapper;
-    private final String movieRatingsTable;
-    private final DynamoDBMapperConfig writeToMovieRatingConfig;
+    private final DynamoDBMapperConfig writeMovieRatingConfig;
 
     public MoviesDynamoDbRepository(final AmazonDynamoDB amazonDynamoDB, final String movieRatingsTable) {
+
         this.dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB);
-        this.movieRatingsTable = movieRatingsTable;
 
-        final var writeToMovieRatingConfigBuilder = DynamoDBMapperConfig.builder()
+        final var writeMovieRatingConfigBuilder = DynamoDBMapperConfig.builder()
             .withSaveBehavior(DynamoDBMapperConfig.SaveBehavior.UPDATE);
-
-        if (!isNullOrEmpty(this.movieRatingsTable)) {
-            writeToMovieRatingConfigBuilder.withTableNameOverride(new DynamoDBMapperConfig.TableNameOverride(this.movieRatingsTable));
+        if (!isNullOrEmpty(movieRatingsTable)) {
+            writeMovieRatingConfigBuilder.withTableNameOverride(new DynamoDBMapperConfig.TableNameOverride(movieRatingsTable));
         }
-        writeToMovieRatingConfig = writeToMovieRatingConfigBuilder.build();
+
+        this.writeMovieRatingConfig = writeMovieRatingConfigBuilder.build();
     }
 
     public void updateMovieRating(final MovieRating movieRating) {
-        this.dynamoDBMapper.save(movieRating, writeToMovieRatingConfig);
+        this.dynamoDBMapper.save(movieRating, writeMovieRatingConfig);
     }
 }
