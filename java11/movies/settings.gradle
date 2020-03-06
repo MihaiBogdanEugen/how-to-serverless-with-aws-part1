@@ -1,5 +1,5 @@
 rootProject.name = "movies"
 
-include ":functions:get-movie"
-include ":functions:update-movie-rating"
-include ":functions:upload-movie-infos"
+include ":get-movie"
+include ":update-movie-rating"
+include ":upload-movie-infos"
