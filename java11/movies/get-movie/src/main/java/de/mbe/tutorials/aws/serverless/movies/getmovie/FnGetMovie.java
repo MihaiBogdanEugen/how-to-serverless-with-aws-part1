@@ -1,18 +1,18 @@
 package de.mbe.tutorials.aws.serverless.movies.getmovie;
 
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.model.AmazonDynamoDBException;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayV2ProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayV2ProxyResponseEvent;
-import com.amazonaws.xray.AWSXRay;
-import com.amazonaws.xray.handlers.TracingHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.mbe.tutorials.aws.serverless.movies.getmovie.config.DaggerFnComponent;
 import de.mbe.tutorials.aws.serverless.movies.getmovie.repository.MoviesDynamoDbRepository;
 import de.mbe.tutorials.aws.serverless.movies.getmovie.utils.APIGatewayV2ProxyResponseUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import javax.inject.Inject;
 
 import static com.amazonaws.util.StringUtils.isNullOrEmpty;
 
@@ -20,21 +20,14 @@ public final class FnGetMovie implements RequestHandler<APIGatewayV2ProxyRequest
 
     private static final Logger LOGGER = LogManager.getLogger(FnGetMovie.class);
 
-    private final ObjectMapper MAPPER = new ObjectMapper();
+    @Inject
+    ObjectMapper objectMapper;
 
-    private final MoviesDynamoDbRepository repository;
+    @Inject
+    MoviesDynamoDbRepository moviesDynamoDbRepository;
 
     public FnGetMovie() {
-
-        final var amazonDynamoDB = AmazonDynamoDBClientBuilder
-                .standard()
-                .withRequestHandlers(new TracingHandler(AWSXRay.getGlobalRecorder()))
-                .build();
-
-        final var movieInfosTable = System.getenv("MOVIE_INFOS_TABLE");
-        final var movieRatingsTable = System.getenv("MOVIE_RATINGS_TABLE");
-
-        this.repository = new MoviesDynamoDbRepository(amazonDynamoDB, movieInfosTable, movieRatingsTable);
+        DaggerFnComponent.builder().build().inject(this);
     }
 
     @Override
@@ -51,12 +44,12 @@ public final class FnGetMovie implements RequestHandler<APIGatewayV2ProxyRequest
 
         try {
 
-            final var movie = repository.getByMovieId(movieId);
+            final var movie = moviesDynamoDbRepository.getByMovieId(movieId);
             if (movie == null) {
                 return notFound(LOGGER, "Movie " + movieId + " not found");
             }
 
-            final var movieAsString = MAPPER.writeValueAsString(movie);
+            final var movieAsString = objectMapper.writeValueAsString(movie);
             return ok(LOGGER, movieAsString);
 
         } catch (AmazonDynamoDBException error) {

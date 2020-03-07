@@ -19,7 +19,7 @@ public final class MoviesDynamoDbRepository {
 
     public MoviesDynamoDbRepository(final AmazonDynamoDB amazonDynamoDB, final String movieInfosTable) {
 
-        this.dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB);
+        dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB);
 
         final var writeMovieInfoConfigBuilder = DynamoDBMapperConfig.builder()
                 .withSaveBehavior(DynamoDBMapperConfig.SaveBehavior.PUT);
@@ -27,7 +27,7 @@ public final class MoviesDynamoDbRepository {
             writeMovieInfoConfigBuilder.withTableNameOverride(new DynamoDBMapperConfig.TableNameOverride(movieInfosTable));
         }
 
-        this.writeMovieInfoConfig = writeMovieInfoConfigBuilder.build();
+        writeMovieInfoConfig = writeMovieInfoConfigBuilder.build();
     }
 
     public int saveLines(final List<String> lines) {
@@ -50,7 +50,7 @@ public final class MoviesDynamoDbRepository {
             return 0;
         }
 
-        this.dynamoDBMapper.batchWrite(movieInfos, Collections.emptyList(), this.writeMovieInfoConfig);
+        dynamoDBMapper.batchWrite(movieInfos, Collections.emptyList(), writeMovieInfoConfig);
 
         return movieInfos.size();
     }

@@ -17,7 +17,7 @@ public final class MoviesDynamoDbRepository {
 
     public MoviesDynamoDbRepository(final AmazonDynamoDB amazonDynamoDB, final String movieInfosTable, final String movieRatingsTable) {
 
-        this.dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB);
+        dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB);
 
         final var readMovieRatingConfigBuilder = DynamoDBMapperConfig.builder()
                 .withConsistentReads(DynamoDBMapperConfig.ConsistentReads.CONSISTENT);
@@ -25,7 +25,7 @@ public final class MoviesDynamoDbRepository {
             readMovieRatingConfigBuilder.withTableNameOverride(new DynamoDBMapperConfig.TableNameOverride(movieRatingsTable));
         }
 
-        this.readMovieRatingConfig = readMovieRatingConfigBuilder.build();
+        readMovieRatingConfig = readMovieRatingConfigBuilder.build();
 
         final var readMovieInfoConfigBuilder = DynamoDBMapperConfig.builder()
                 .withConsistentReads(DynamoDBMapperConfig.ConsistentReads.CONSISTENT);
@@ -33,13 +33,13 @@ public final class MoviesDynamoDbRepository {
             readMovieInfoConfigBuilder.withTableNameOverride(new DynamoDBMapperConfig.TableNameOverride(movieInfosTable));
         }
 
-        this.readMovieInfoConfig = readMovieInfoConfigBuilder.build();
+        readMovieInfoConfig = readMovieInfoConfigBuilder.build();
     }
 
     public Movie getByMovieId(final String movieId) {
 
-        final var movieInfo = this.dynamoDBMapper.load(MovieInfo.class, movieId, this.readMovieInfoConfig);
-        final var movieRating = this.dynamoDBMapper.load(MovieRating.class, movieId, this.readMovieRatingConfig);
+        final var movieInfo = dynamoDBMapper.load(MovieInfo.class, movieId, readMovieInfoConfig);
+        final var movieRating = dynamoDBMapper.load(MovieRating.class, movieId, readMovieRatingConfig);
 
         final var movie = new Movie();
 

@@ -14,7 +14,7 @@ public final class MoviesDynamoDbRepository {
 
     public MoviesDynamoDbRepository(final AmazonDynamoDB amazonDynamoDB, final String movieRatingsTable) {
 
-        this.dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB);
+        dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB);
 
         final var writeMovieRatingConfigBuilder = DynamoDBMapperConfig.builder()
             .withSaveBehavior(DynamoDBMapperConfig.SaveBehavior.UPDATE);
@@ -22,10 +22,10 @@ public final class MoviesDynamoDbRepository {
             writeMovieRatingConfigBuilder.withTableNameOverride(new DynamoDBMapperConfig.TableNameOverride(movieRatingsTable));
         }
 
-        this.writeMovieRatingConfig = writeMovieRatingConfigBuilder.build();
+        writeMovieRatingConfig = writeMovieRatingConfigBuilder.build();
     }
 
     public void updateMovieRating(final MovieRating movieRating) {
-        this.dynamoDBMapper.save(movieRating, writeMovieRatingConfig);
+        dynamoDBMapper.save(movieRating, writeMovieRatingConfig);
     }
 }
