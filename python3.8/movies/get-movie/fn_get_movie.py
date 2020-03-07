@@ -4,7 +4,6 @@ import os
 import boto3
 
 from aws_xray_sdk.core import patch_all
-
 patch_all()
 
 logger = logging.getLogger()
@@ -38,7 +37,7 @@ def handle_request(event, context):
                     "Content-Type": "application/json"
                 },
                 "statusCode": 404,
-                "body": f"Movie {request_http_method} not found"
+                "body": f"Movie {movie_id} not found"
             }
         else:
             return {
@@ -80,7 +79,7 @@ def get_record_by_id(movie_id, table):
     table = dynamoDB.Table(table)
     response = table.get_item(
         Key={
-            "movieId": movie_id
+            "movie_id": movie_id
         },
     )
 

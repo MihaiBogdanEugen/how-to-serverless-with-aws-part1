@@ -4,7 +4,6 @@ import os
 import boto3
 
 from aws_xray_sdk.core import patch_all
-
 patch_all()
 
 logger = logging.getLogger()
@@ -86,7 +85,7 @@ def update_movie_rating(movie_id, body, movie_ratings_table):
     table = dynamoDB.Table(movie_ratings_table)
     return table.update_item(
         Key={
-            "movieId": movie_id
+            "movie_id": movie_id
         },
         UpdateExpression=update_expression,
         ExpressionAttributeValues=expression_attribute_values

@@ -43,7 +43,7 @@ public final class FnGetMovie implements RequestHandler<APIGatewayV2ProxyRequest
         LOGGER.info("FnGetMovie.getRemainingTimeInMillis {} ", context.getRemainingTimeInMillis());
 
         if (!request.getPathParameters().containsKey("movieId") || isNullOrEmpty(request.getPathParameters().get("movieId"))) {
-            return badRequest(LOGGER, "Missing {id} path parameter");
+            return badRequest(LOGGER, "Missing path parameter {movieId}");
         }
 
         final var movieId = request.getPathParameters().get("movieId");
@@ -52,7 +52,6 @@ public final class FnGetMovie implements RequestHandler<APIGatewayV2ProxyRequest
         try {
 
             final var movie = repository.getByMovieId(movieId);
-
             if (movie == null) {
                 return notFound(LOGGER, "Movie " + movieId + " not found");
             }
