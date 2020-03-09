@@ -1,4 +1,4 @@
-CODE_VERSION?=python
+CODE_VERSION?=java
 
 ## help: Prints this help message
 help:
@@ -10,7 +10,14 @@ clean:
 	rm -rdf packages/
 ifeq ($(CODE_VERSION), java)
 	@(echo "Using Java11")
-	cd java11/movies/ && ./gradlew clean
+	cd java11/movies/ && \
+	./gradlew clean && \
+	rm -rdf .settings/ && \
+	rm -df .project && \
+	rm -rdf */bin/ && \
+	rm -rdf */.settings/ && \
+	rm -df */.classpath && \
+	rm -df */.project
 else ifeq ($(CODE_VERSION), python)
 	@(echo "Using Python3.8")
 else
