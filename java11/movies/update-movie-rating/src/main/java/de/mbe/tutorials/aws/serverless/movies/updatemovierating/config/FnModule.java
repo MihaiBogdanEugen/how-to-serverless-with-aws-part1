@@ -13,7 +13,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 @Module
-public class FnModule {
+public final class FnModule {
 
     @Singleton
     @Provides
