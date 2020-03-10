@@ -108,9 +108,9 @@ curl --request PATCH \
   --url ${API_GW_DEPLOYMENT_URI}/movies/mv1 \
   --header 'content-type: application/json' \
   --data '{
-	"movieId": "mv1",
-	"rottenTomatoesRating": 98,
-	"imdbRating": 43
+	"movie_id": "mv1",
+	"rotten_tomatoes_rating": 98,
+	"imdb_rating": 43
 }'
 ```
 - Send GET request, verify results

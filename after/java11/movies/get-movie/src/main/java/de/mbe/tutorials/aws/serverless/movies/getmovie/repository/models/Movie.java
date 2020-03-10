@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public final class Movie {
 
-    private String id;
+    private String movieId;
     private String name;
     private String countryOfOrigin;
     private LocalDate releaseDate;
@@ -13,8 +13,8 @@ public final class Movie {
 
     public Movie() { }
 
-    public String getId() {
-        return id;
+    public String getMovieId() {
+        return movieId;
     }
 
     public String getName() {
@@ -37,8 +37,8 @@ public final class Movie {
         return imdbRating;
     }
 
-    public void setId(final String id) {
-        this.id = id;
+    public void setMovieId(final String movieId) {
+        this.movieId = movieId;
     }
 
     public void setName(final String name) {

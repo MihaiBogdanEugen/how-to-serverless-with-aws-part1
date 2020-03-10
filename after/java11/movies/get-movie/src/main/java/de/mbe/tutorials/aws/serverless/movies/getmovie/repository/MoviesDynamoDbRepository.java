@@ -58,7 +58,7 @@ public final class MoviesDynamoDbRepository {
             movie.setRottenTomatoesRating(movieRating.getRottenTomatoesRating());
         }
 
-        movie.setId(movieId);
+        movie.setMovieId(movieId);
         return movie;
     }
 }
